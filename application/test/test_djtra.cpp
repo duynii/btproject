@@ -57,7 +57,7 @@ TEST( djtra, find_shortest_path1 )
     board <<    1, 4, 3,
                 5, 5, 7,
                 7, 6, 9;
-    djtra path_search( board );
+    djtra path_search( board, djtra::type::shortest_path );
     
     // path 1, 5, 5 & 6
     indices_t path = path_search.find( index_t(0,0), { index_t(2, 1) } );
@@ -74,7 +74,7 @@ TEST( djtra, find_longest_path1 )
     board <<    1, 4, 3,
                 5, 5, 7,
                 7, 6, 9;
-    djtra path_search( board, -1 );
+    djtra path_search( board, djtra::type::longest_path );
     
     // There is only one path
     // path 1, 5, 5 & 6
@@ -92,7 +92,7 @@ TEST( djtra, find_longest_path2 )
     board <<    1, 7, 7,
                 2, 6, 8,
                 3, 5, 9;
-    djtra path_search( board, -1 );
+    djtra path_search( board, djtra::type::longest_path );
     
     // There is only one path
     // path 1, 5, 5 & 6
@@ -108,7 +108,7 @@ TEST( djtra, find_same_source_and_target )
     board <<    1, 7, 7,
                 6, 4, 8,
                 3, 5, 9;
-    djtra path_search( board, -1 );
+    djtra path_search( board, djtra::type::longest_path );
     
     // There is only one path
     // path 1, 5, 5 & 6
@@ -123,10 +123,45 @@ TEST( djtra, find_cannot_reach_target )
     board <<    1, 7, 7,
                 5, 6, 8,
                 3, 5, 9;
-    djtra path_search( board, -1 );
+    djtra path_search( board, djtra::type::longest_path );
     
     // There is only one path
     // path 1, 5, 6, 8
     indices_t path = path_search.find( index_t(0,0), { index_t(2, 1) } );
     EXPECT_EQ( 0, path.size() );
+}
+
+TEST( djtra, find_selecting_longest_path )
+{
+    algo::matrix board(5, 5);
+    board <<    3, 4, 4, 4, 5,
+                2, 6, 8, 2, 6,
+                1, 6, 8, 2, 8,
+                1, 2, 2, 2, 10,
+                3, 5, 9, 3, 3;
+                
+    djtra path_search( board, djtra::type::longest_path );
+    
+    // There are two paths
+    indices_t path = path_search.find( index_t(2,0), { index_t(3, 4) } );
+    EXPECT_EQ( 10, path.size() );
+    EXPECT_EQ( index_t(2,0), path.front() );
+    EXPECT_EQ( index_t(3,4), path.back() );
+}
+TEST( djtra, find_selecting_shortest_path )
+{
+    algo::matrix board(5, 5);
+    board <<    3, 4, 4, 4, 5,
+                2, 6, 8, 2, 6,
+                1, 6, 8, 2, 8,
+                1, 2, 2, 2, 10,
+                3, 5, 9, 3, 3;
+                
+    djtra path_search( board, djtra::type::shortest_path );
+    
+    // There are two paths
+    indices_t path = path_search.find( index_t(2,0), { index_t(3, 4) } );
+    EXPECT_EQ( 6, path.size() );
+//     EXPECT_EQ( index_t(2,0), path.front() );
+//     EXPECT_EQ( index_t(3,4), path.back() );
 }

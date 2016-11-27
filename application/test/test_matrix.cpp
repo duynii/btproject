@@ -8,6 +8,52 @@ using namespace algo;
 static constexpr uint_t vertical = 11;
 static constexpr uint_t horizontal = 10;
 
+// This shows the benefit of Eigen, no need to write parallel code
+TEST( matrix, min_and_max_cell )
+{
+    algo::matrix board(3, 3);
+    board <<    1, 5, 3,
+                5, 5, 5,
+                7, 5, 9;
+                
+    algo::matrix::Index row, col;
+    
+    int max = board.maxCoeff(&row, &col);
+    
+    EXPECT_EQ( 9, max );
+    EXPECT_EQ( 2, row );
+    EXPECT_EQ( 2, col );
+    
+    int min = board.minCoeff(&row, &col);
+    
+    EXPECT_EQ( 1, min );
+    EXPECT_EQ( 0, row );
+    EXPECT_EQ( 0, col );
+    
+    {
+        board <<    1, 5, 3,
+                    5, 1, 5,
+                    7, 5, 1;
+                    
+        min = board.minCoeff(&row, &col);
+        
+        EXPECT_EQ( 1, min );
+        EXPECT_EQ( 0, row );
+        EXPECT_EQ( 0, col );
+    }
+    {
+        board <<    1, 5, 3,
+                    5, 9, 5,
+                    7, 5, 9;
+                    
+        max = board.maxCoeff(&row, &col);
+        
+        EXPECT_EQ( 9, max );
+        EXPECT_EQ( 1, row );
+        EXPECT_EQ( 1, col );
+    }
+}
+
 TEST( matrix, move_from_center )
 {
     algo::matrix board(3, 3);

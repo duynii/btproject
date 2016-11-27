@@ -165,3 +165,39 @@ TEST( djtra, find_selecting_shortest_path )
 //     EXPECT_EQ( index_t(2,0), path.front() );
 //     EXPECT_EQ( index_t(3,4), path.back() );
 }
+
+TEST( djtra, find_selecting_longest_path_of_two_targets )
+{
+    algo::matrix board(5, 5);
+    board <<    3, 4, 4, 4, 5,
+                2, 6, 8, 2, 6,
+                1, 6, 8, 2, 8,
+                1, 2, 2, 3, 10,
+                3, 5, 9, 10, 3;
+                
+    djtra path_search( board, djtra::type::longest_path );
+    
+    // There are two paths
+    indices_t path = path_search.find( index_t(2,0), { index_t(3, 4), index_t(4, 3) } );
+    EXPECT_EQ( 10, path.size() );
+    EXPECT_EQ( index_t(2,0), path.front() );
+    EXPECT_EQ( index_t(3,4), path.back() );
+}
+
+TEST( djtra, find_selecting_shortest_path_of_two_targets )
+{
+    algo::matrix board(5, 5);
+    board <<    3, 4, 4, 4, 5,
+                2, 6, 8, 2, 6,
+                1, 6, 8, 2, 8,
+                1, 2, 2, 3, 10,
+                3, 5, 9, 10, 3;
+                
+    djtra path_search( board, djtra::type::shortest_path );
+    
+    // There are two paths
+    indices_t path = path_search.find( index_t(2,0), { index_t(3, 4), index_t(4, 3) } );
+    EXPECT_EQ( 6, path.size() );
+    EXPECT_EQ( index_t(2,0), path.front() );
+    EXPECT_EQ( index_t(4,3), path.back() );
+}

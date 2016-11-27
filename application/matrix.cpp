@@ -20,7 +20,6 @@ indices_t matrix::move_from(const index_t& cur, uint_t sum, const array_t& visit
     
     if( sum % 2 > 0 )
     {
-//         std::cerr << "odd vertical" << std::endl;
         index_t lower(cur.row - 1, cur.col);
         if( !visited(lower.row, lower.col)  && valid(lower) && movable(lower, value) ) { results.push_back(lower); }
         index_t upper(cur.row + 1, cur.col);
@@ -32,7 +31,6 @@ indices_t matrix::move_from(const index_t& cur, uint_t sum, const array_t& visit
         if( !visited(left.row, left.col)   && valid(left) && movable(left, value) )  { results.push_back(left); }
         index_t right(cur.row, cur.col + 1);
         if( !visited(right.row, right.col) && valid(right) && movable(right, value) ) { results.push_back(right); }
-//         std::cerr << "even horizontal: " << value << " " << valid(right) << " " << self(right.row, right.col) << std::endl;
     }
     
     return std::move(results);

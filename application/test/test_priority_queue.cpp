@@ -9,27 +9,6 @@
 
 using namespace algo;
 
-TEST( priority_queue, min_queue_with_ints )
-{
-    typedef std::priority_queue< int, std::vector< int >, std::greater< int > > min_queue_int;
-    min_queue_int queue;
-    queue.push( 5 );
-    queue.push( 1 );
-    queue.push( 3 );
-    queue.push( 9 );
-    queue.push( std::numeric_limits< int >::max() );
-    
-    EXPECT_EQ( 1, queue.top() );
-    queue.pop();
-    EXPECT_EQ( 3, queue.top() );
-    queue.pop();
-    EXPECT_EQ( 5, queue.top() );
-    queue.pop();
-    EXPECT_EQ( 9, queue.top() );
-    queue.pop();
-    EXPECT_EQ( std::numeric_limits< int >::max(), queue.top() );
-}
-
 TEST( priority_queue, min_queue_with_costs )
 {
     {
@@ -59,11 +38,14 @@ TEST( priority_queue, min_queue_with_find_and_update )
         queue.push( cost_t(2,2, 2) );
         queue.push( cost_t(5,5, 5) );
         
-        queue.find_and_update( cost_t( 5, 5, 0 ) );
+        // No such cell in the queue
+        EXPECT_FALSE( queue.find_and_update( cost_t(9, 9, 9) ) );
+        
+        EXPECT_TRUE( queue.find_and_update( cost_t(5, 5, 0) ) );
         EXPECT_EQ( cost_t(5, 5, 0), queue.top() );
         queue.pop();
         
-        queue.find_and_update( cost_t( 2, 2, 0 ) );
+        EXPECT_TRUE( queue.find_and_update( cost_t(2, 2, 0) ) );
         EXPECT_EQ( cost_t(2, 2, 0), queue.top() );
         queue.pop();
         

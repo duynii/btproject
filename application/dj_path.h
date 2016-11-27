@@ -11,7 +11,7 @@ typedef Eigen::Array< sum_t, Eigen::Dynamic, Eigen::Dynamic > cost_matrix_t;
 
 class djtra
 {
-    const matrix& board;
+    const matrix& board;    /// This is the grid to search
     int move_cost;      // cost from one square to the next
     typedef Eigen::Array< index_t, Eigen::Dynamic, Eigen::Dynamic > previous_t;
     // Each cell point to the previous cell on the path
@@ -27,7 +27,13 @@ public:
     enum class type { longest_path=-1, shortest_path=1 };
     /// Give it the grid to search on
     djtra( const matrix& b, type t=type::longest_path );
-    // return the target with the longest path that have been reached
+    
+    /// @Brief Returns the path that is the longest or shortest
+    // Given one source node/cell and multiple target cells
+    // Note: If the grid has multiple lowest cell hence multiple sources, then call this function 
+    // multiple times (in parallel?)
+    // @param targets If multiple targets are set, returns the longest or shortest path
+    // @Return Returns empty list if no target is reachable
     indices_t find(const index_t& source, const indices_t& targets);
     
     /// Accessors

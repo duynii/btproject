@@ -3,6 +3,7 @@
 #include <comma/application/command_line_options.h>
 #include <comma/application/signal_flag.h>
 
+/// Some dummy tests to test linking
 TEST( application, dj_algorithm )
 {
     EXPECT_TRUE( 1 == 1 );

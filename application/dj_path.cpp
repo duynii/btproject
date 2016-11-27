@@ -79,39 +79,38 @@ indices_t djtra::find(const index_t& source, const indices_t& targets)
     array_t visited = board;
     visited.setZero();
     
-    std::cerr << "aaa" << std::endl;
     min_queue_t queue;
-//     matrix::array_type cost_matrix(board.rows(), board.cols());
     cost_matrix_t& cost_matrix = cost_matrix_;
     
+    // Populate the queue with all cells, also cost matrix 
+    // Set the source cell to cost of 0, sum of value of the cell
     populate_queue( board, source, queue, cost_matrix );
-    std::cerr << "bbb" << std::endl;
     
     while( !queue.empty() )
     {
         const cost_t& cur = queue.top();
         queue.pop();
         if( cur.cost == cost_t::max() ) { 
-            std::cerr  << "No more node to visit" << std::endl;
+//             std::cerr  << "No more node to visit" << std::endl;
             break; 
         } // Done
         
         sum_t cell = cost_matrix(cur.row, cur.col);
         
-        // Sum of valus for the current path
-//         cell.sum += board( cur.row, cur.col );
+        // Find out which cells it can move to, if any
         indices_t moves = board.move_from( cur, cell.sum, visited );
         
-        std::cerr << "current: " << cur << " sum: " << cell.sum << " moves: " << moves.size() << std::endl;
+//         std::cerr << "current: " << cur << " sum: " << cell.sum << " moves: " << moves.size() << std::endl;
         
-        // process edges here
+        // process edges here (cells to move to)
         for( const index_t& node : moves )
         {
             int cost = cur.cost + move_cost;
             if( cost_matrix(node.row, node.col).cost > cost )
             {
+                // set new cost at the next cell, and the sum at this cell
                 cost_matrix(node.row, node.col) = sum_t( cost, cell.sum + board(node.row, node.col) );
-                previous(node.row, node.col) = cur;
+                previous(node.row, node.col) = cur;     // set the path
                 // Update value in priority_queue here
                 queue.find_and_update( cost_t( node.row, node.col, cost ) );
             }
@@ -124,9 +123,22 @@ indices_t djtra::find(const index_t& source, const indices_t& targets)
         for( const auto& target : targets ) { if( !visited(target.row, target.col) ) { all_target_done = false; } }
         if( all_target_done )
         {
-            std::cerr  << "Found all target(s)" << std::endl;
+//             std::cerr  << "Found all target(s) " << targets.size() << std::endl;
             // Todo pick best target
-            return get_path( targets.front(), source );
+            indices_t best_path =  get_path( targets.front(), source );
+            
+            auto it=targets.cbegin();
+            ++it;
+            for(; it!=targets.cend(); ++it) {
+                indices_t path = get_path( *it, source );
+                if( move_cost == int(type::longest_path) ) {
+                    if( path.size() > best_path.size() ) { best_path = path; }
+                }
+                else {
+                    if( path.size() < best_path.size() ) { best_path = path; }
+                }
+            } 
+            return best_path;
         }
     }
 

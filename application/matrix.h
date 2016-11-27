@@ -29,11 +29,16 @@ typedef Eigen::ArrayXXi array_t;
 class matrix : public array_t
 {
 public:
-    indices_t move_from(const index_t& cur, uint_t sum, const array_t& visited);
+    indices_t move_from(const index_t& cur, uint_t sum, const array_t& visited) const;
+    
+    inline bool movable( const index_t& index, int value) const { 
+        const matrix& m = *this;
+        return value <= m(index.row, index.col);
+    }
     
     matrix(uint_t r, uint_t c) : array_t( r, c ) {}
 private:
-    bool valid(const index_t& ix);
+    bool valid(const index_t& ix) const;
 };
 
 } // namespace algo {

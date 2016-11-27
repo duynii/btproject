@@ -38,6 +38,41 @@ ELSE( CMAKE_SIZEOF_VOID_P EQUAL 8 )
   SET( IS_64_BIT FALSE )
 ENDIF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 
+option( USE_CXX11 "build with C++11 support" ON )
+if( USE_CXX11 )
+    if( UNIX )
+        # A much better way to do this is with CXX_STANDARD but that requires CMake 3.1
+        include( CheckCXXCompilerFlag )
+        CHECK_CXX_COMPILER_FLAG( "-std=c++11" compiler_supports_cxx11 )
+        CHECK_CXX_COMPILER_FLAG( "-std=c++0x" compiler_supports_cxx0x )
+        if( compiler_supports_cxx11 )
+            set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11" )
+        elseif( compiler_supports_cxx0x )
+            set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x" )
+        else()
+            message( FATAL_ERROR "USE_CXX11 set to ON but ${CMAKE_CXX_COMPILER} has no C++11 support")
+        endif()
+    endif()
+endif()
+
+IF( WIN32 )
+    # improve later
+    #FIND_PATH( Eigen_INCLUDE_DIR NAMES Eigen/CMakeLists.txt PATHS $ENV{EIGEN_ROOT} )
+    FIND_PATH( Eigen_INCLUDE_DIR NAMES signature_of_eigen3_matrix_library PATHS $ENV{EIGEN_ROOT} )
+ELSEIF( APPLE )
+    # actually the following line will probably work everywhere, not just APPLE (but have not tested on Windows yet)
+    FIND_PATH( Eigen_INCLUDE_DIR NAMES signature_of_eigen3_matrix_library PATHS $ENV{EIGEN_ROOT} PATH_SUFFIXES eigen3 )
+ELSE( WIN32 )
+    #FIND_PATH( Eigen_INCLUDE_DIR Eigen/Core PATHS $ENV{EIGEN_ROOT} /usr/include/eigen3 /usr/local/include/eigen3 )
+    FIND_PATH( Eigen_INCLUDE_DIR NAMES signature_of_eigen3_matrix_library PATHS $ENV{EIGEN_ROOT} /usr/include/eigen3 /usr/local/include/eigen3 )
+ENDIF( WIN32 )
+IF( NOT EXISTS ${Eigen_INCLUDE_DIR} )
+    MESSAGE( "could not find Eigen - should be the path containing the Eigen 3 directory and /Eigen/Eigen, /Eigen/Core, etc..." )
+ELSE( NOT EXISTS ${Eigen_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${Eigen_INCLUDE_DIR} )
+ENDIF( NOT EXISTS ${Eigen_INCLUDE_DIR} )
+
+
 IF(CMAKE_BUILD_TOOL MATCHES "make")
   IF(NOT CMAKE_CXX_FLAGS MATCHES "-Wall")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
@@ -139,7 +174,7 @@ ENDIF(UNIX AND NOT QNXNTO AND NOT APPLE)
 SET( btproject_ALL_EXTERNAL_LIBRARIES ${Boost_LIBRARIES} ${btproject_ALL_EXTERNAL_LIBRARIES} )
 
 SET( btproject_ALL_LIBRARIES ${btproject_ALL_LIBRARIES} ${btproject_ALL_LIBRARIES} ${btproject_ALL_EXTERNAL_LIBRARIES} ) # as gcc parses library list only once
-SET( btproject_EXTERNAL_INCLUDES ${Boost_INCLUDE_DIRS} )
+SET( btproject_EXTERNAL_INCLUDES ${Boost_INCLUDE_DIRS}  ${Eigen_INCLUDE_DIR} )
 
 
 # ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)

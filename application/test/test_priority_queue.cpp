@@ -36,18 +36,44 @@ TEST( priority_queue, min_queue_with_ints )
 
 TEST( priority_queue, min_queue_with_costs )
 {
-    min_queue_t queue;
-    
-    queue.push( cost_t(0,0) );
-    queue.push( cost_t(1,1, 1) );
-    queue.push( cost_t(2,2, 2) );
-    queue.push( cost_t(5,5, 5) );
-    
-    EXPECT_EQ( 1, queue.top().cost );
-    queue.pop();
-    EXPECT_EQ( 2, queue.top().cost );
-    queue.pop();
-    EXPECT_EQ( cost_t(5,5, 5), queue.top() );
-    queue.pop();
-    EXPECT_EQ( cost_t(0, 0, cost_t::max()), queue.top() );
+    {
+        min_queue_t queue;
+        
+        queue.push( cost_t(0,0) );
+        queue.push( cost_t(1,1, 1) );
+        queue.push( cost_t(2,2, 2) );
+        queue.push( cost_t(5,5, 5) );
+        
+        EXPECT_EQ( 1, queue.top().cost );
+        queue.pop();
+        EXPECT_EQ( 2, queue.top().cost );
+        queue.pop();
+        EXPECT_EQ( cost_t(5,5, 5), queue.top() );
+        queue.pop();
+        EXPECT_EQ( cost_t(0, 0, cost_t::max()), queue.top() );
+    }
+}
+TEST( priority_queue, min_queue_with_find_and_update )
+{
+    {
+        min_queue_t queue;
+        
+        queue.push( cost_t(0,0) );
+        queue.push( cost_t(1,1, 1) );
+        queue.push( cost_t(2,2, 2) );
+        queue.push( cost_t(5,5, 5) );
+        
+        queue.find_and_update( cost_t( 5, 5, 0 ) );
+        EXPECT_EQ( cost_t(5, 5, 0), queue.top() );
+        queue.pop();
+        
+        queue.find_and_update( cost_t( 2, 2, 0 ) );
+        EXPECT_EQ( cost_t(2, 2, 0), queue.top() );
+        queue.pop();
+        
+        EXPECT_EQ( cost_t(1, 1, 1), queue.top() );
+        queue.pop();
+        
+        EXPECT_EQ( cost_t(0, 0, cost_t::max()), queue.top() );
+    }
 }

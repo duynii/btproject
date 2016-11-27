@@ -5,6 +5,8 @@
 #include <boost/optional.hpp>
 #include <boost/concept_check.hpp>
 #include "matrix.h"
+#include <boost/heap/priority_queue.hpp>
+#include <boost/heap/fibonacci_heap.hpp>
 
 namespace algo {
     
@@ -25,7 +27,13 @@ public:
     };
 };
 
-typedef std::priority_queue< cost_t, std::vector< cost_t >, cost_t::greater > min_queue_t;
+// typedef std::priority_queue< cost_t, std::vector< cost_t >, cost_t::greater > min_queue_t;
 
+class min_queue_t : public boost::heap::fibonacci_heap< cost_t, boost::heap::compare< cost_t::greater > >
+{
+public:
+    min_queue_t::ordered_iterator find( const index_t& index ) const;
+    bool find_and_update( const cost_t& item );
+};
 
 } // namespace algo {

@@ -41,7 +41,7 @@ public:
     }
     
     matrix(uint_t r, uint_t c) : array_t( r, c ) {}
-private:
+    
     bool valid(const index_t& ix) const;
 };
 

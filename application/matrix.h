@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Eigen/Dense>
 #include <vector>
 #include <boost/optional.hpp>
@@ -18,10 +20,10 @@ struct index_t {
     }
     
 };
-static std::ostream& operator<<( std::ostream& os, const index_t& rhs) {
-    os << '(' << rhs.row << ',' << rhs.col << ')';
-    return os;
-}
+// static std::ostream& operator<<( std::ostream& os, const index_t& rhs) {
+//     os << '(' << rhs.row << ',' << rhs.col << ')';
+//     return os;
+// }
     
 typedef std::vector< index_t > indices_t; 
 

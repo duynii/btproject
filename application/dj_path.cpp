@@ -76,9 +76,10 @@ indices_t djtra::find(const index_t& source, const indices_t& targets)
     visited.setZero();
     
     min_queue_t queue;
-    matrix::array_type cost_matrix;
+    matrix::array_type cost_matrix(board.rows(), board.cols());
     populate_queue( board, source, queue, cost_matrix );
     
+    int sum = 0;
     while( !queue.empty() )
     {
         const cost_t& cur = queue.top();
@@ -88,13 +89,16 @@ indices_t djtra::find(const index_t& source, const indices_t& targets)
             break; 
         } // Done
         
-        int value = board( cur.row, cur.col );
-        indices_t moves = board.move_from( cur, value, visited );
+        // Sum of valus for the current path
+        sum += board( cur.row, cur.col );
+        indices_t moves = board.move_from( cur, sum, visited );
+        
+        std::cerr << "current: " << cur << " sum: " << sum << " moves: " << moves.size() << std::endl;
         
         // set targets here
         for( const index_t& node : moves )
         {
-            int cost = value + move_cost;
+            int cost = cur.cost + move_cost;
             if( cost_matrix(node.row, node.col) > cost )
             {
                 cost_matrix(node.row, node.col) = cost;

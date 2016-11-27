@@ -27,6 +27,11 @@ public:
     };
 };
 
+static std::ostream& operator<<( std::ostream& os, const cost_t& rhs) {
+    os << '(' << rhs.row << ',' << rhs.col << ';' << rhs.cost << ')';
+    return os;
+}
+
 // typedef std::priority_queue< cost_t, std::vector< cost_t >, cost_t::greater > min_queue_t;
 
 class min_queue_t : public boost::heap::fibonacci_heap< cost_t, boost::heap::compare< cost_t::greater > >

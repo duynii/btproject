@@ -8,10 +8,6 @@
 #include "../min_queue.h"
 
 using namespace algo;
-static std::ostream& operator<<( std::ostream& os, const cost_t& rhs) {
-    os << '(' << rhs.row << ',' << rhs.col << ';' << rhs.cost << ')';
-    return os;
-}
 
 TEST( priority_queue, min_queue_with_ints )
 {

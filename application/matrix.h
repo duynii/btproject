@@ -21,10 +21,10 @@ struct index_t {
     bool operator!=(const index_t& rhs) const { return !(*this == rhs); }
     
 };
-// static std::ostream& operator<<( std::ostream& os, const index_t& rhs) {
-//     os << '(' << rhs.row << ',' << rhs.col << ')';
-//     return os;
-// }
+static std::ostream& operator<<( std::ostream& os, const index_t& rhs) {
+    os << '(' << rhs.row << ',' << rhs.col << ')';
+    return os;
+}
     
 typedef std::vector< index_t > indices_t; 
 

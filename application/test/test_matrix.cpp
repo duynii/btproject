@@ -7,10 +7,6 @@ using namespace algo;
 
 static constexpr uint_t vertical = 11;
 static constexpr uint_t horizontal = 10;
-static std::ostream& operator<<( std::ostream& os, const index_t& rhs) {
-    os << '(' << rhs.row << ',' << rhs.col << ')';
-    return os;
-}
 
 TEST( matrix, move_from_center )
 {

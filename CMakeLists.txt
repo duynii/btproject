@@ -162,9 +162,7 @@ ENDIF( btproject_BUILD_TESTS )
 
 SET( btproject_ALL_LIBRARIES
         debug btproject_application-d
-        optimized btproject_application
-        debug btproject_base-d
-        optimized btproject_base )
+        optimized btproject_application )
 
 
 IF(UNIX AND NOT QNXNTO AND NOT APPLE)
@@ -177,50 +175,8 @@ SET( btproject_ALL_LIBRARIES ${btproject_ALL_LIBRARIES} ${btproject_ALL_LIBRARIE
 SET( btproject_EXTERNAL_INCLUDES ${Boost_INCLUDE_DIRS}  ${Eigen_INCLUDE_DIR} )
 
 
-# ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-# 
-# FILE( GLOB btproject_PACKAGE_CMAKEFILES ${CMAKE_CURRENT_SOURCE_DIR}/CMakeFiles/*.cmake )
-# 
-# INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/CMakeFiles/generate_${PROJECT_NAME}_config.cmake )
-# 
-# CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/CMakeFiles/use_${PROJECT_NAME}.cmake.in
-#                 ${PROJECT_BINARY_DIR}/CMakeFiles/use_${PROJECT_NAME}.cmake COPYONLY IMMEDIATE )
-# 
-# SET( btproject_PACKAGE_CMAKEFILES ${btproject_PACKAGE_CMAKEFILES} ${PROJECT_BINARY_DIR}/CMakeFiles/use_${PROJECT_NAME}.cmake )
-# INSTALL( FILES ${btproject_PACKAGE_CMAKEFILES}
-#          DESTINATION ${btproject_INSTALL_PACKAGE_DIR} )
-
 #-----------------------------------------------------------------------------
 # add sources
 
 ADD_SUBDIRECTORY( application )
 #ADD_SUBDIRECTORY( base )
-
-
-#in future, may need to add third party dlls somehow, if they are linked as dlls. Not needed for statically linking to boost.
-# #if we set them up to install to bin they might be packaged through, e.g. roughly (using GLOB):
-# #install(FILES "${Boost_LIBRARY_DIRS}/*.dll" DESTINATION bin )
-# 
-# #the following set up optional parameters for cpack
-# SET(CPACK_PACKAGE_NAME "comma")
-# SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Command line utilities to manipulate various structured and unstructured data from offline or real time data.")
-# SET(CPACK_PACKAGE_VENDOR "Australian Centre for Field Robotics")
-# SET(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING")
-# SET(CPACK_PACKAGE_VERSION_MAJOR "1")
-# SET(CPACK_PACKAGE_VERSION_MINOR ${COMMITDATE})
-# SET(CPACK_PACKAGE_VERSION_PATCH ${COMMITHASH})
-# SET(CPACK_PACKAGE_CONTACT "t.teo@acfr.usyd.edu.au")
-# 
-# # If the user builds shared, make sure that the RPM package (that might be generated) runs ldconfig when it's installed.
-# IF( BUILD_SHARED_LIBS )
-# 	SET(CPACK_RPM_SPEC_MORE_DEFINE "%posttrans -p /sbin/ldconfig")
-# ENDIF( BUILD_SHARED_LIBS )
-
-
-# #this line finds the appropriate Visual Studio DLLS in windows. Maybe it would find other dlls if a different build tool were used. Probably should be windows only.
-# INCLUDE( InstallRequiredSystemLibraries )
-# 
-# #this line does all the work. Actually, even if this is the only line, you get all but the dlls...
-# INCLUDE( CPack )
-
-

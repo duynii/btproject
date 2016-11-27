@@ -10,4 +10,6 @@ cost_t::cost_t(uint_t r, uint_t c) :
 
 }
 
+
+
 } // namespace algo {

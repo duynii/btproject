@@ -18,6 +18,7 @@ struct index_t {
     bool operator==(const index_t& rhs) const { 
         return row == rhs.row && col == rhs.col;
     }
+    bool operator!=(const index_t& rhs) const { return !(*this == rhs); }
     
 };
 // static std::ostream& operator<<( std::ostream& os, const index_t& rhs) {
@@ -31,6 +32,7 @@ typedef Eigen::ArrayXXi array_t;
 class matrix : public array_t
 {
 public:
+    typedef array_t array_type;
     indices_t move_from(const index_t& cur, uint_t sum, const array_t& visited) const;
     
     inline bool movable( const index_t& index, int value) const { 

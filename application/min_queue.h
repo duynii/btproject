@@ -27,4 +27,5 @@ public:
 
 typedef std::priority_queue< cost_t, std::vector< cost_t >, cost_t::greater > min_queue_t;
 
+
 } // namespace algo {
